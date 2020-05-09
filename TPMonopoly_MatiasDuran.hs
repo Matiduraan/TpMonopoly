@@ -1,6 +1,7 @@
 module Library where
 import Data.List
 import Data.Char
+import Text.Show.Functions()
 
 type Propiedad = (String,Int)
 type Accion = Participante -> Participante
@@ -13,7 +14,7 @@ data Participante = UnParticipante {
   propiedades :: [Propiedad],
   acciones :: [Accion]
 
-}
+} deriving (Show)
 
 carolina :: Participante
 carolina = UnParticipante "Carolina" 500 "Accionista" [] [pasarPorElBanco, pagarAAccionistas]
@@ -44,11 +45,12 @@ propiedadesBaratas props = length(filter (<150) (map (obtenerValor) props))
 obtenerValor:: Propiedad -> Int
 obtenerValor (_,valor) = valor
 
-
+pagarAAccionistas :: Accion
 pagarAAccionistas unParticipante 
     | esAccionista unParticipante = unParticipante {dinero = dinero unParticipante + 200, acciones = acciones unParticipante ++ [pagarAAccionistas]}
     | otherwise                   = unParticipante {dinero = dinero unParticipante - 100, acciones = acciones unParticipante ++ [pagarAAccionistas]}
 
+esAccionista :: Participante -> Bool
 esAccionista unParticipante = tactica unParticipante == "Accionista"
 
 tieneTactica :: String -> Participante -> Bool
